@@ -13,9 +13,7 @@ module Pos.Wallet.Web.State.Acidic
 
        , GetProfile (..)
        , GetAccountIds (..)
-       , GetAccountMetas (..)
        , GetAccountMeta (..)
-       , GetWalletMetas (..)
        , GetWalletMeta (..)
        , GetWalletMetaIncludeUnready (..)
        , GetWalletPassLU (..)
@@ -28,7 +26,6 @@ module Pos.Wallet.Web.State.Acidic
        , GetAccountWAddresses (..)
        , DoesWAddressExist (..)
        , GetTxMeta (..)
-       , GetUpdates (..)
        , GetNextUpdate (..)
        , TestReset (..)
        , GetHistoryCache (..)
@@ -40,7 +37,6 @@ module Pos.Wallet.Web.State.Acidic
        , AddCustomAddress (..)
        , CreateAccount (..)
        , AddWAddress (..)
-       , AddRemovedAccount (..)
        , CreateWallet (..)
        , SetProfile (..)
        , SetAccountMeta (..)
@@ -50,7 +46,6 @@ module Pos.Wallet.Web.State.Acidic
        , SetWalletSyncTip (..)
        , SetWalletTxMeta (..)
        , AddOnlyNewTxMetas (..)
-       , SetWalletTxHistory (..)
        , GetWalletTxHistory (..)
        , AddOnlyNewTxMeta (..)
        , RemoveWallet (..)
@@ -60,7 +55,6 @@ module Pos.Wallet.Web.State.Acidic
        , RemoveAccount (..)
        , RemoveWAddress (..)
        , RemoveCustomAddress (..)
-       , TotallyRemoveWAddress (..)
        , AddUpdate (..)
        , RemoveNextUpdate (..)
        , InsertIntoHistoryCache (..)
@@ -117,9 +111,7 @@ makeAcidic ''WalletStorage
       'WS.testReset
     , 'WS.getProfile
     , 'WS.getAccountIds
-    , 'WS.getAccountMetas
     , 'WS.getAccountMeta
-    , 'WS.getWalletMetas
     , 'WS.getWalletMeta
     , 'WS.getWalletMetaIncludeUnready
     , 'WS.getWalletPassLU
@@ -132,7 +124,6 @@ makeAcidic ''WalletStorage
     , 'WS.getAccountWAddresses
     , 'WS.doesWAddressExist
     , 'WS.getTxMeta
-    , 'WS.getUpdates
     , 'WS.getNextUpdate
     , 'WS.getHistoryCache
     , 'WS.getCustomAddresses
@@ -145,7 +136,6 @@ makeAcidic ''WalletStorage
     , 'WS.createAccount
     , 'WS.createWallet
     , 'WS.addWAddress
-    , 'WS.addRemovedAccount
     , 'WS.setProfile
     , 'WS.setAccountMeta
     , 'WS.setWalletMeta
@@ -154,7 +144,6 @@ makeAcidic ''WalletStorage
     , 'WS.setWalletSyncTip
     , 'WS.setWalletTxMeta
     , 'WS.addOnlyNewTxMetas
-    , 'WS.setWalletTxHistory
     , 'WS.getWalletTxHistory
     , 'WS.addOnlyNewTxMeta
     , 'WS.removeWallet
@@ -163,7 +152,6 @@ makeAcidic ''WalletStorage
     , 'WS.removeHistoryCache
     , 'WS.removeAccount
     , 'WS.removeWAddress
-    , 'WS.totallyRemoveWAddress
     , 'WS.addUpdate
     , 'WS.removeNextUpdate
     , 'WS.updateHistoryCache
