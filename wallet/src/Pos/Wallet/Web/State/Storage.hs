@@ -479,7 +479,7 @@ removeTxMetas cWalId = wsTxHistory . at cWalId .= Nothing
 addOnlyNewTxMetas :: CId Wal -> [(CTxId, CTxMeta)] -> Update ()
 addOnlyNewTxMetas = mapM_ . uncurry . addOnlyNewTxMeta
 
--- | Delete metadata by given wallet id and transactions ids.
+-- | Delete transactions metadata by given wallet id and transactions ids.
 removeWalletTxMetas :: CId Wal -> [CTxId] -> Update ()
 removeWalletTxMetas cWalId cTxs =
     wsTxHistory . at cWalId . non' _Empty %= flip (foldr HM.delete) cTxs
@@ -570,12 +570,13 @@ removeOnlyCreatingPtx :: CId Wal -> TxId -> Update Bool
 removeOnlyCreatingPtx wid txId =
     checkAndSmthPtx wid txId (has (_Just . _PtxCreating)) (put Nothing)
 
+-- | Datatype which defines how state of pending transaction should change.
 data PtxMetaUpdate
-    = PtxIncSubmitTiming
-    | PtxResetSubmitTiming SlotId
-    | PtxMarkAcknowledged
+    = PtxIncSubmitTiming          -- ^ Delay resubmission further
+    | PtxResetSubmitTiming SlotId -- ^ Set next resubmission slot explicitely
+    | PtxMarkAcknowledged         -- ^ Mark tx as acknowledged by some peer
 
--- | For simple atomic updates of meta info
+-- | Update meta info of pending transaction atomically.
 ptxUpdateMeta :: CId Wal -> TxId -> PtxMetaUpdate -> Update ()
 ptxUpdateMeta wid txId updType =
     wsWalletInfos . ix wid . wsPendingTxs . ix txId %=
@@ -587,11 +588,13 @@ ptxUpdateMeta wid txId updType =
             PtxMarkAcknowledged ->
                 ptxMarkAcknowledgedPure
 
+-- | Add transaction to set of pending transactions, if it isn't already there.
 addOnlyNewPendingTx :: PendingTx -> Update ()
 addOnlyNewPendingTx ptx =
     wsWalletInfos . ix (_ptxWallet ptx) .
     wsPendingTxs . at (_ptxTxId ptx) %= (<|> Just ptx)
 
+-- | Gets whole wallet storage. Used primarily for testing and diagnostics.
 getWalletStorage :: Query WalletStorage
 getWalletStorage = ask
 
